@@ -1,0 +1,17 @@
+#!/bin/bash
+# How to install:
+# $ ln -s `pwd`/ci/pre-commit .git/hooks/
+if [[ "$PATH" == "/Applications/SourceTree.app/"* && -f "$HOME/.bash_profile" ]]; then
+  source "$HOME/.bash_profile"
+fi
+
+function run {
+  $@
+  exitcode=$?
+  if [[ "$exitcode" != "0" ]]; then
+    exit $exitcode
+  fi
+}
+
+echo "Convention test..."
+run flake8 . --exclude=./tests
