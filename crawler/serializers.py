@@ -3,7 +3,6 @@
 
 """
 import datetime
-import time
 
 
 def payload_serializer(*, type: str, id: int = None, link: str, count: int,
