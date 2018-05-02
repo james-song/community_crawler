@@ -7,8 +7,9 @@
 - 뽐뿌 [자유게시판](http://www.ppomppu.co.kr/zboard/zboard.php?id=freeboard)
 - 웃대 [베스트오브베스트](http://www.todayhumor.co.kr/board/list.php?table=bestofbest)
 - slrclub [자유게시판](http://www.slrclub.com/bbs/zboard.php?id=free)
-- 루리웹 [커뮤니티 유머게시판](http://bbs2.ruliweb.daum.net/gaia/do/ruliweb/default/community/2078/list?bbsId=G005)
-
+- 루리웹 [유머 베스트 게시판](http://bbs.ruliweb.com/best/selection)
+- 루리웹 [핫딜 게시판](http://bbs.ruliweb.com/market/board/1020)
+- 루리웹 [취미 게시판](http://bbs.ruliweb.com/hobby)
 
 ## 설치 및 개발 환경
 - python 3.x, [Mongodb](https://www.mongodb.org), [virtualwrapper](https://virtualenvwrapper.readthedocs.org/en/latest/)

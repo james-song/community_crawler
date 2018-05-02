@@ -15,7 +15,9 @@ from crawler.config import crawler_config
 from crawler.exc import SkipCrawler, TerminatedCrawler
 from crawler.worker.clien import Clien
 from crawler.worker.ppomppu import Ppomppu
-from crawler.worker.ruliweb import Ruliweb
+from crawler.worker.ruliweb_humor import RuliwebHumor
+from crawler.worker.ruliweb_hobby import RuliwebHobby
+from crawler.worker.ruliweb_hotdeal import RuliwebHotdeal
 from crawler.worker.slrclub import Slrclub
 from crawler.worker.todayhumor import Todayhumor
 
@@ -34,22 +36,29 @@ class Crawler(threading.Thread):
     def run(self):
         l = logger.getChild('Crawler.run')
         site = self.queue.get()
-        try:
-            site.do()
-        except ServerSelectionTimeoutError:
-            self.is_stop = True
-        except SkipCrawler:
-            l.info('crawler skip')
+        
+        while True:
+            try:
+                site.do()
+            except ServerSelectionTimeoutError:
+                self.is_stop = True
+            except SkipCrawler:
+                l.info('crawler skip')
+            except:
+                l.error('unhandled exception')
+            
         self.queue.task_done()
 
 
 def crawler(*, queue: Queue):
     sites = [
-        Clien(threshold=20, page_max=20),
-        Ppomppu(threshold=30, page_max=20),
-        Ruliweb(threshold=15, page_max=20),
-        Slrclub(threshold=15, page_max=20),
-        Todayhumor(threshold=100, page_max=5)
+        Clien(threshold=20, page_max=10),
+        Ppomppu(threshold=30, page_max=10),
+        Slrclub(threshold=15, page_max=10),
+        Todayhumor(threshold=20, page_max=10),
+        RuliwebHobby(threshold=15, page_max=10),
+        RuliwebHumor(threshold=15, page_max=10),
+        RuliwebHotdeal(threshold=15, page_max=10),
     ]
     thread_num = len(sites)
     for site in sites:

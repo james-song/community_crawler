@@ -5,13 +5,15 @@
 import datetime
 
 
-def payload_serializer(*, type: str, id: int, link: str, count: int,
+def payload_serializer(*, type: str, id: int = None, link: str, count: int,
                        title: str) -> dict:
     utc_now = datetime.datetime.now(tz=datetime.timezone.utc)
-    return {'type': type,
-            'id': id,
+    dic = {'type': type,
             'link': link,
             'count': count,
             'title': title,
             'date': utc_now.isoformat()
             }
+    
+    dic['id'] = id
+    return dic

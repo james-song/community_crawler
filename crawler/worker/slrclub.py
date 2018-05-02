@@ -42,7 +42,7 @@ class Slrclub(BaseSite):
                         _id = text.get('href').split('no=')[1]
                         _count = _temp[1:-1]
                         _title = text.text
-                        _link = self.url.split('zboard.php')[0] + \
+                        _link = self.url.split('/bbs')[0] + \
                             text.get('href')
                         obj = payload_serializer(type=self.type, id=_id,
                                                  link=_link, count=_count,
