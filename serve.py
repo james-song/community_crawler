@@ -2,7 +2,6 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-import logging
 import logging.config
 import random
 import threading
@@ -15,9 +14,9 @@ from crawler.config import crawler_config
 from crawler.exc import SkipCrawler, TerminatedCrawler
 from crawler.worker.clien import Clien
 from crawler.worker.ppomppu import Ppomppu
-from crawler.worker.ruliweb_humor import RuliwebHumor
 from crawler.worker.ruliweb_hobby import RuliwebHobby
 from crawler.worker.ruliweb_hotdeal import RuliwebHotdeal
+from crawler.worker.ruliweb_humor import RuliwebHumor
 from crawler.worker.slrclub import Slrclub
 from crawler.worker.todayhumor import Todayhumor
 
@@ -36,17 +35,15 @@ class Crawler(threading.Thread):
     def run(self):
         l = logger.getChild('Crawler.run')
         site = self.queue.get()
-        
-        while True:
-            try:
-                site.do()
-            except ServerSelectionTimeoutError:
-                self.is_stop = True
-            except SkipCrawler:
-                l.info('crawler skip')
-            except:
-                l.error('unhandled exception')
-            
+
+        try:
+            site.do()
+        except ServerSelectionTimeoutError:
+            l.error('TimeOut Error %s', site)
+        except SkipCrawler:
+            l.info('Crawler Skip')
+        except:
+            l.error('Unhandled Exception')
         self.queue.task_done()
 
 
@@ -88,9 +85,6 @@ if __name__ == '__main__':
                 oldtime = datetime.now()
                 workers = crawler(queue=queue)
                 queue.join()
-                for w in workers:
-                    if w.is_stop:
-                        raise TerminatedCrawler
                 count += 1
                 l.info("finish crawler: {}".format(count))
         except (KeyboardInterrupt, TerminatedCrawler):

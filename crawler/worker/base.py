@@ -3,17 +3,18 @@
 
 """
 import logging
+import sys
 
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 
 from bs4 import BeautifulSoup
 
-import sys
-sys.path.append("..")
-
 from ..config import crawler_config
 from ..database import MongoDB
+
+sys.path.append("..")
+
 
 logger = logging.getLogger(__name__)
 
@@ -36,16 +37,13 @@ class BaseSite:
         document = 'archive'
 
         objid = None
-        c = None
+        c = self.db.query(document) \
+            .find_one({'type': data['type'],
+                       'id': data['id']})
         if data.get('id') is None:
             c = self.db.query(document) \
                 .find_one({'type': data['type'],
-                           'title': data['title']})            
-        else:
-            c = self.db.query(document) \
-                .find_one({'type': data['type'],
-                           'id': data['id']})
-                
+                           'title': data['title']})
         if c is None:
             objid = self.db.insert(document, data=data)
             l.info('insert data: {}, objid: {}'.format(data, objid))
@@ -57,7 +55,6 @@ class BaseSite:
                 objid = self.db.update(document, c=c, data=d)
                 if objid['ok']:
                     return c['_id']
-                
         return objid
 
     def crawling(self, url, encoding='utf-8'):

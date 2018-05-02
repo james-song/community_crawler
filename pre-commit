@@ -12,6 +12,5 @@ function run {
     exit $exitcode
   fi
 }
-
-echo "Convention test..."
-run flake8 . --exclude=./tests
+echo "Flake8 Test.."
+run flake8 . --exclude=./tests,./venv

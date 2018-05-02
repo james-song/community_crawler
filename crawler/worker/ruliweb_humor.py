@@ -40,6 +40,6 @@ class RuliwebHumor(BaseSite):
                 if int(_count) >= self.threshold:
                     _title = ctx.select('a')[1].text
                     _link = ctx.select('a')[1].get('href')
-                    obj = payload_serializer(type=self.type, link=_link, count=_count,
-                                             title=_title)
+                    obj = payload_serializer(type=self.type, link=_link,
+                                             count=_count, title=_title)
                     self.insert_or_update(obj)

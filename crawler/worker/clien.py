@@ -35,15 +35,15 @@ class Clien(BaseSite):
         l = logger.getChild('Clien.do')
         l.info('start {} crawler'.format(self.type))
         for soup in self.crawler():
-            # https://github.com/liza183/clienBBS/blob/master/clien.py 
+            # https://github.com/liza183/clienBBS/blob/master/clien.py
             for ctx in soup.find_all('div', {"class": 'list_item symph_row'}):
-                #_temp = ctx.select('div#list_reply reply_symph')
+                # temp = ctx.select('div#list_reply reply_symph')
                 _count = int(ctx.findAll("div")[3].span.text)
                 if _count >= self.threshold:
                     _title = ctx.findAll("span")[1].text
-                    _link = self.article_base_url + ctx.find("a",{"class":"list_subject"})['href']
-                    _author = ctx['data-author-id'].strip()
-                    _timestamp = ctx.find("div",{"class":"list_time"}).span.span.text
-                        
-                    obj = payload_serializer(type=self.type, link=_link, count=_count, title=_title)
+                    _link = self.article_base_url + \
+                        ctx.find("a", {"class": "list_subject"})['href']
+
+                    obj = payload_serializer(type=self.type, link=_link,
+                                             count=_count, title=_title)
                     self.insert_or_update(obj)
